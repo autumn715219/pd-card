@@ -1,0 +1,40 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* --------------------------------------
+ * 共用區塊
+ * -------------------------------------- */
+/*共用--for平台開關*/
+.for_pc    {}
+.for_phone { display: none !important;}
+  @media screen and (max-width:767px){
+    .for_pc    { display: none !important;}
+    .for_phone { display: inherit !important;}
+  }
+/*基本*/
+html, body { margin:0; padding:0;}
+img { border: 0px; vertical-align: top;}
+a { text-decoration:none;}
+/*共用--區塊_all*/
+.Area { z-index:1; position: relative; margin:0 auto; padding:0; border-radius:0; text-align:center; }
+.Area a { position:relative; display:block;} 
+.Area .go_bt { -webkit-transition: all 0.2s ease; -moz-transition: all 0.2s ease; -ms-transition: all 0.2s ease; -o-transition: all 0.2s ease; transition: all 0.2s ease;}
+.Area .go_bt:hover { -webkit-transform:none; -moz-transform:none; -ms-transform:none; -o-transform:none; transform:none; filter:brightness(110%);}
+  @media screen and (min-width:768px){
+    .Area .go_bt:hover { -webkit-transform:translateY(-6px); -moz-transform:translateY(-6px); -ms-transform:translateY(-6px); -o-transform:translateY(-6px); transform:translateY(-6px);}		
+  }
+  /*寬度,間距*/
+  .Area1920 { margin:0 auto; width:100%;}
+  .Area1220 { margin:0 auto; width:100%;}
+  .Area960 { margin:0 auto; width:100%;}
+  .Area700 { margin:0 auto; width:100%;}
+  .Area375 { margin:0 auto; width:100%;}
+  .Areabottom { margin-bottom:30px;}
+    @media screen and (min-width:768px){
+      .Area1920 { width:1860px;}
+      .Area1220 { width:1220px;}
+      .Area960 { width:960px;}
+      .Area700 { width:700px;}
+      .Area375 { width:375px;}
+      .Areabottom { margin-bottom:80px;}
+    }

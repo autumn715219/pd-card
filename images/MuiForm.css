@@ -1,0 +1,125 @@
+@charset "big5";
+/*
+ * Ghvzon
+ * 表單UI MuiForm-v0.1
+ *******************************************************************
+ *  --2020.08.07--新增UI-選項樣式1-勾勾
+ *  --2020.03.09--新增UI-輸入欄input,下拉選單select,上傳file
+ *******************************************************************
+ */ 
+
+/* --------------------------------------
+* 基本
+* -------------------------------------- */
+.MuiForm,
+.MuiForm input,
+.MuiForm select { font-family: "Microsoft JhengHei", sans-serif; font-size: 1em; line-height: 1; text-align: left; color: rgba(0,0,0,0.87);}
+.MuiForm input,
+.MuiForm select { display: block; margin: 0; padding: 0; border: 0; border-radius: 0; width: 100%; -webkit-box-sizing: border-box; box-sizing: border-box;  background-color: transparent; -webkit-appearance: none; -moz-appearance: none; appearance: none;}
+.MuiForm input:focus,
+.MuiForm select:focus { outline: none;}
+    @media screen and (max-width:767px){
+    }
+    @media screen and (min-width:760.5em){
+      /*.MuiForm,
+      .MuiForm input,
+      .MuiForm select,
+      .MuiForm label { font-size: 1.125em;}*/
+    }
+
+  
+/* --------------------------------------
+* 一般樣式
+* -------------------------------------- */
+.MuiForm { z-index: 0; position: relative; margin: 1.5em 0.5em; padding: 0; color: rgba(0,0,0,0.87);}
+.MuiForm .MuiForm_animated { transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;}
+.MuiForm .MuiForm_helpertext { display: none; margin-top: 0.1875em; font-size: 0.75rem; line-height: 1.66; color: #f44336; text-align: left;}
+.MuiForm .MuiForm_icon { fill: currentColor; display: inline-block; width: 1em; height: 1em; font-size: 1.5rem; transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;}
+.MuiForm .MuiForm_box { }
+
+/*底圖*/
+.MuiForm .MuiForm_bg { pointer-events: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding: 0; border: 0;}
+.MuiForm .MuiForm_bg { border-style: solid; border-width: 0 0 1px 0; border-color: rgba(0,0,0,0.23); border-radius: inherit;}
+.MuiForm:hover .MuiForm_bg { border-color: rgba(0,0,0,0.87);}
+    /*高亮*/
+    .MuiForm.is_focused .MuiForm_bg { border-width: 0 0 0.125em 0; border-color: #1976d2;}
+
+/*文字*/  
+.MuiForm .MuiForm_label { pointer-events: none; z-index: 1; position: absolute; top: 0; left: 0; display: block; transform-origin: top left; transform: translate(0,1.25em) scale(1); color: rgba(0,0,0,0.54);}
+.MuiForm .MuiForm_label:after { content: ""; z-index: -1; position: absolute; top: 0; left: -0.5em; width: calc(100% + 1em); height: 100%; display: block; background-color: #fff; opacity: 0;}
+    /*飄移*/
+    .MuiForm.is_shrink .MuiForm_label { transform: translate(0px,1.5px) scale(0.75);}
+    .MuiForm.is_shrink .MuiForm_label:after { opacity: 1;}
+    /*高亮*/
+    .MuiForm.is_focused .MuiForm_label { color: #1976d2;}
+
+/*輸入欄input*/
+.MuiForm_inputbox .MuiForm_box { padding-top: 1em;}
+.MuiForm_inputbox .MuiForm_label { transform: translate(0,1.6875em) scale(1);}
+.MuiForm_inputbox .MuiForm_input { padding: 0.375em 0 0.4375em;}
+  
+/*下拉選單select*/
+.MuiForm_selectbox .MuiForm_box { position: relative; padding-top: 1em;}
+.MuiForm_selectbox .MuiForm_select { position: relative; padding: 0.5em 0 0.625em; border-color: currentColor; cursor: pointer;}
+.MuiForm_selectbox .MuiForm_select { } 
+.MuiForm_selectbox .MuiForm_icon { pointer-events: none; position: absolute; top: calc(50% - 0.375em); right: 0; color: rgba(0,0,0,0.54);}
+
+/*上傳file*/
+.MuiForm_uploadbox { padding: 0.90625em 0.875em;}
+.MuiForm_uploadbox .MuiForm_uploadbox_upload { display: block; text-align: center; cursor: pointer;}
+.MuiForm_uploadbox .MuiForm_upload { position: absolute; top: 0; left: 0; opacity: 0; }
+.MuiForm_uploadbox .MuiForm_btn { display: block; margin: 0 auto; padding: 0.625em 0; border-radius: 0.25em; width: 100%; max-width: 7.5em; color: #fff; text-align: center; background-color: #1976d2;}
+.MuiForm_uploadbox .MuiForm_btn:before { content: "上傳";}
+.MuiForm_uploadbox .MuiForm_btn_clear {  background-color: #666;}
+.MuiForm_uploadbox .MuiForm_btn_clear:before { content: "清除";}
+.MuiForm_uploadbox .MuiForm_icon { padding: 1.875em 0 0.375em; width: 3em; height: 3em; color: rgba(0,0,0,0.54);}
+.MuiForm_uploadbox .MuiForm_uploadbox_preview { display: none;}
+.MuiForm_uploadbox .MuiForm_preview_img { display: block; margin-bottom: 0.625em; width: 100%; height: 0; padding-bottom: 100%; background-position: center top; background-size: contain; background-repeat: no-repeat;}
+    /*預覽*/
+    .MuiForm.is_preview .MuiForm_uploadbox_importview { display: none;}
+    .MuiForm.is_preview .MuiForm_uploadbox_preview { display: block;}
+  
+/*選項樣式1-勾勾*/
+.MuiForm_checkbox .MuiForm_checkbox_label { position: relative; display: block; line-height: 1.25em; }
+.MuiForm_checkbox .MuiForm_checkbox_label .MuiForm_checkbox_btn { position: absolute; left: 0.1875em; top: 50%; transform: translateY(-50%); display: block; width: 1.125em; height: 1.125em; border: 1px solid #D2D2D2; border-radius: 50%; -webkit-box-sizing: border-box; box-sizing: border-box; background-color: #fff;} 
+.MuiForm_checkbox .MuiForm_checkbox_label .MuiForm_checkbox_txt { margin-left: 1.7rem;}
+.MuiForm_checkbox .MuiForm_checkbox_label input { position: absolute; left: 0.4375em; top: 0.4375em; margin: 0 0.9375em 0 0; width: 1px; height: 1px; opacity: 0; vertical-align: top;}
+.MuiForm_checkbox .MuiForm_checkbox_label input:hover + .MuiForm_checkbox_btn,
+.MuiForm_checkbox .MuiForm_checkbox_label input:focus + .MuiForm_checkbox_btn { box-shadow: 0 0 0.1875em 0.1875em rgba(225,225,225,0.4);}
+.MuiForm_checkbox .MuiForm_checkbox_label input:checked + .MuiForm_checkbox_btn { border: 1px solid #d62872; background-color: #E40480;}
+.MuiForm_checkbox .MuiForm_checkbox_label input:checked + .MuiForm_checkbox_btn::before { content: ""; position: absolute; top: 0.125em; left: 0.3125em; display: block; width: 0.25em; height: 0.5em; border: 0.125em solid #fff; border-top: none; border-left: none; -webkit-transform: rotate(40deg); transform: rotate(40deg);}
+
+
+/* --------------------------------------
+* 自訂樣式
+* -------------------------------------- */
+
+  
+/*樣式--外框線*/
+.MuiForm_style_outline { }
+.MuiForm_style_outline .MuiForm_helpertext { margin-left: 0.875em; margin-right: 0.875em;}
+.MuiForm_style_outline .MuiForm_icon { right: 0.4375em;}
+.MuiForm_style_outline .MuiForm_box { border-radius: 0.25em;}
+
+/*底圖*/
+.MuiForm_style_outline .MuiForm_bg { border-width: 1px;}
+    /*高亮*/
+    .MuiForm_style_outline.is_focused .MuiForm_bg { border-width: 0.125em;}
+
+/*文字*/  
+.MuiForm_style_outline .MuiForm_label { transform: translate(0.875em,1.1em) scale(1);}
+    /*飄移*/
+    .MuiForm_style_outline.is_shrink .MuiForm_label { transform: translate(0.875em,-0.375em) scale(0.75);} 
+
+/*輸入欄input*/
+.MuiForm_style_outline.MuiForm_inputbox .MuiForm_box { padding: 0.90625em 0.875em;}
+.MuiForm_style_outline.MuiForm_inputbox .MuiForm_input { padding: 0;}
+
+/*下拉選單select*/
+.MuiForm_style_outline.MuiForm_selectbox .MuiForm_box { padding: 0;}
+.MuiForm_style_outline.MuiForm_selectbox .MuiForm_select { padding: 1.0625em 0.875em; padding-right: 2em;}
+.MuiForm_style_outline.MuiForm_selectbox .MuiForm_icon { top: calc(50% - 0.75em);}
+
+
+
+

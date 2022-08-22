@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="zh"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="address=no">
+<title>公版挑選</title>
+  
+  <!-----↓套件↓-----> 
+  <link   class="js_link" data-title="表單UI"        rel="stylesheet" type="text/css" href="images/MuiForm.css">
+  <link   class="js_link" data-title="訊息套件"       rel="stylesheet" type="text/css" href="images/toastr.min.css">
+  <link   class="js_link" data-title="輪播套件v5.2.1" rel="stylesheet" type="text/css" href="images/swiper.min.css">
+  <link   class="js_link" data-title="程式碼更好看"    rel="stylesheet" type="text/css" href="images/prism.css">
+  <!-----↑套件↑----->  
+  <!-----↓共用素材↓-----> 
+  <link   class="js_link" data-title="共用css-UI"     rel="stylesheet" type="text/css" href="images/js_link-uiLayout.css">
+  <!-----↑共用素材↑----->
+  
+  <link data-title="模組化公版" rel="stylesheet" type="text/css" href="images/PD_Layout.css"> 
+  <link rel="stylesheet" type="text/css" href="images/Layout.css">
+  
+</head>
+<body>
+<div class="WRAPPER articleList" id="app"> 
+  
+
+  <div class="WRAPPER-header">
+    <div class="WRAPPER-header_box">
+
+      <div class="Area_header">
+        <div class="box">
+          <div class="box_ box_1">
+            <h1>公版挑選機制<small v-text="v_num + vListsFu()[0]" :title="vListsFu()[1]" @click="toastrFu();"></small></h1>
+          </div>
+          <div class="box_ box_2">
+            <div class="box_ box_3" v-show="!debug.isshowAllLayout">              
+                <!--入搞Class/品數/文案-->
+                <div class="box_3_box Area Area_tabbox Area_intotext" :class="{'cate-hover': intotext.hover}">
+                  <div class="box">
+                    <div class="box_ box_tabbox_title">
+                      <a @click="intotext.hover = !intotext.hover;"><span>入稿資料<small>{{ '('+ intotext.listgroups[intotext.isTextFilter] +')' }}</small></span><i></i></a>
+                    </div>
+                    <div class="box_ box_tabbox_content">
+
+                      <div class="box_2_0">
+                        <div class="box_ Area Area_checkbox Area_imgTransparent">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="isImgTransparent" @change="updateImgArrayFu(isImgTransparent);"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">去背商品圖</div>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="box_ Area Area_input Area_bgc">
+                          <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.css.bgc}">
+                            <label class="MuiForm_label MuiForm_animated">背景色</label>
+                            <div class="MuiForm_box">
+                              <input class="MuiForm_input" type="text" v-model="intosetup.css.bgc"><fieldset class="MuiForm_bg"></fieldset>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="box_ Area Area_input Area_libgc">
+                          <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.css.libgc}">
+                            <label class="MuiForm_label MuiForm_animated">li背景色</label>
+                            <div class="MuiForm_box">
+                              <input class="MuiForm_input" type="text" v-model="intosetup.css.libgc"><fieldset class="MuiForm_bg"></fieldset>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="box_ Area Area_input Area_classname">
+                          <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.classname}">
+                            <label class="MuiForm_label MuiForm_animated">class名稱</label>
+                            <div class="MuiForm_box">
+                              <input class="MuiForm_input" type="text" v-model="intosetup.classname"><fieldset class="MuiForm_bg"></fieldset>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="box_ Area Area_input">
+                          <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.linum}">
+                            <label class="MuiForm_label MuiForm_animated">li數量</label>
+                            <div class="MuiForm_box">
+                              <input class="MuiForm_input" type="number" v-model.number="intosetup.linum"><fieldset class="MuiForm_bg"></fieldset>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box_2_1" >
+                        <button v-for="(list, key, i) of intotext.lists" 
+                                :key="i" 
+                                v-html="intotext.listgroups[key]"
+                                :class="{'cate-hover': intotext.isTextFilter === key}"
+                                @click="intotext.isTextFilter = key;"></button>
+                      </div> 
+                      <div class="box_2_2">
+                        <div class="box_ Area Area_input" v-for="(val, key, i) of intotext.lists[intotext.isTextFilter].val" :key="i">
+                          <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': val.val}">
+                            <label class="MuiForm_label MuiForm_animated"><span>{{ key }}</span> - <small>{{ intotext.listname[key].val }}</small></label>
+                            <div class="MuiForm_box" :title="val.val">
+                              <input class="MuiForm_input" type="text" v-model="val.val"><fieldset class="MuiForm_bg"></fieldset>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="box_ box_4 for_pc" :class="{'cate-fixed': htmlcode.fixed}" v-show="!debug.isshowAllLayout">
+              <div class="fixed_bg" @click="htmlcode.fixed = false;"></div>
+
+              <!--HTMLcode-->
+              <div class="box_ Area Area_tabbox Area_htmlcode" :class="{'cate-hover': htmlcode.hover}">
+                <div class="box">
+                  <div class="box_ box_tabbox_title">
+                    <a @click="htmlcode.hover = !htmlcode.hover; htmlcode.fixed = false; htmlcode.islinum = !htmlcode.islinum;"><span>匯出HTMLcode</span><i></i></a>
+                  </div>
+                  <div class="box_ box_tabbox_content">
+                    <div class="box_2_1">
+                      <div class="box_2_1_ box_2_1_1">
+                        <div class="Area_checkbox">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="htmlcode.islinum"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">li數量</div>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="Area_checkbox">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="htmlcode.isindent"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">li縮排</div>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="Area_checkbox">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="htmlcode.isdel"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">顯示隱藏標籤</div>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="Area_checkbox">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="htmlcode.isexportTxt"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">顯示入搞資料</div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="box_2_1_ box_2_1_2">
+                        <div class="Area_checkbox">
+                          <div class="MuiForm MuiForm_checkbox">
+                            <label class="MuiForm_checkbox_label">
+                              <input type="checkbox" v-model="htmlcode.fixed"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">放大視窗</div>
+                            </label>
+                          </div>
+                        </div>  
+                        <button class="btn_copy" @click="javascript:SelectText('htmlcode');">一鍵COPY</button>
+                      </div>
+                    </div>
+                    <div class="box_2_2">
+                      <pre class="language-html">
+                        <code class="" id="htmlcode" v-text="data2htmlcodeFu()"></code>
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="box_ box_5 for_pc">
+
+                <!--下載CSS-->
+                <div class="box_5_box Area Area_tabbox Area_download" :class="{'cate-hover': download.hover}">
+                  <div class="box">
+                    <div class="box_ box_tabbox_title">
+                      <a @click="download.hover = !download.hover;"><img src="images/download.svg" alt="下載"><span>下載CSS</span><i></i></a>
+                    </div>
+                    <div class="box_ box_tabbox_content">
+                      <div class="box_5_ box_5_1">
+                        <a target="_blank"
+                        :href="artjsSrc.getartImgPath('images'+'/PD_Layout.css')" 
+                        :title="'最新版控時間: '+ artjsSrc.getartImgPath('images'+'/PD_Layout.css')"><span>CSS壓縮格式</span></a>
+                        <a target="_blank"
+                        :href="artjsSrc.getartImgPath('images'+'/_css/PD_Layout.css')" 
+                        :title="'最新版控時間: '+ artjsSrc.getartImgPath('images'+'/_css/PD_Layout.css')"><span>CSS未壓縮格式</span></a>
+                        <a target="_blank"
+                        :href="artjsSrc.getartImgPath('images'+'/PD_Layout.scss')" 
+                        :title="'最新版控時間: '+ artjsSrc.getartImgPath('images'+'/PD_Layout.scss')"><span>SCSS格式</span></a>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              <!-- <div class="Area_button Area_download">
+                <a :href="artjsSrc.getartImgPath('images'+'/PD_Layout.css')" target="_blank" 
+                   :title="'最新版控時間: '+ artjsSrc.getartImgPath('images'+'/PD_Layout.css')"><img src="images/download.svg" alt="下載"><span>下載CSS</span></a>
+              </div>
+               -->
+            </div>
+            <div class="box_ box_6 for_pc">
+              <div class="Area_button Area_download">
+                <a @click="sharecode.hover = !sharecode.hover;" href="javascript:void(0);"><img src="images/upload.svg" alt="分享"><span>分享目前設定</span><i></i></a>
+              </div>
+            </div>
+            <div class="box_ box_7">
+              <div class="box_7_box Area Area_tabbox Area_debug" :class="{'cate-hover': debug.hover}">
+                <div class="box">
+                  <div class="box_ box_tabbox_title">
+                    <a @click="debug.hover = !debug.hover;"><span>進階工具</small></span><i></i></a>
+                  </div>
+                  <div class="box_ box_tabbox_content">
+                    <div class="box_7_0">
+                      <div class="box_ Area Area_checkbox">
+                        <div class="MuiForm MuiForm_checkbox">
+                          <label class="MuiForm_checkbox_label">
+                            <input type="checkbox" v-model="debug.isshowAllLayout" @change="showAllLayout(debug.isshowAllLayout);"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">全公版列表</div>
+                          </label>
+                        </div>                        
+                      </div>
+                      <div class="box_ Area Area_checkbox">
+                        <div class="MuiForm MuiForm_checkbox">
+                          <label class="MuiForm_checkbox_label">
+                            <input type="checkbox" v-model="debug.ispadding"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">測試間距</div>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="box_ Area Area_checkbox">
+                        <div class="MuiForm MuiForm_checkbox">
+                          <label class="MuiForm_checkbox_label">
+                            <input type="checkbox" v-model="debug.isEcmCode.hover"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">ECM入稿<br>擴充程式</div>
+                          </label>
+                        </div>
+                      </div>
+                      <div class="box_ Area Area_checkbox">
+                        <div class="MuiForm MuiForm_checkbox">
+                          <label class="MuiForm_checkbox_label">
+                            <input type="checkbox" v-model="isPreview"><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">隱藏工具列</div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--分享目前設定-->
+          <div class="box_ Area_sharecode js-hammer cate-fixed" style="display: none;" v-show="sharecode.hover">
+            <div class="box_ Area Area_tabbox Area_sharecode_box cate-hover">
+              <div class="box">
+                <div class="box_ box_tabbox_title">
+                  <a @click="sharecode.hover = !sharecode.hover;" href="javascript:void(0);"><img src="images/upload.svg" alt="分享"><span>分享目前設定</span><i></i></a>
+                </div>
+                <div class="box_ box_tabbox_content">
+                  <div class="box_2_2">
+                    <div class="box_ Area Area_input">
+
+                      <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.group}">
+                        <label class="MuiForm_label MuiForm_animated">分類</label>
+                        <div class="MuiForm_box">
+                          <input class="MuiForm_input" type="text" v-model="intosetup.group"><fieldset class="MuiForm_bg"></fieldset>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="box_ Area Area_input ">
+                      <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.col}">
+                        <label class="MuiForm_label MuiForm_animated">佈局</label>
+                        <div class="MuiForm_box">
+                          <input class="MuiForm_input" type="text" v-model="intosetup.col"><fieldset class="MuiForm_bg"></fieldset>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="box_ Area Area_input ">
+                      <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.name}">
+                        <label class="MuiForm_label MuiForm_animated">名稱</label>
+                        <div class="MuiForm_box">
+                          <input class="MuiForm_input" type="text" v-model="intosetup.name"><fieldset class="MuiForm_bg"></fieldset>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="box_ Area Area_input">
+                      <div class="MuiForm MuiForm_inputbox MuiForm_style_outline" :class="{'is_shrink': intosetup.name2}">
+                        <label class="MuiForm_label MuiForm_animated">說明</label>
+                        <div class="MuiForm_box">
+                          <input class="MuiForm_input" type="text" v-model="intosetup.name2"><fieldset class="MuiForm_bg"></fieldset>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="btn_copy" @click="javascript:SelectText('sharecode');">一鍵COPY</button>
+                    <a class="btn_copy" :href="'mailto:tsshih@fmt.com.tw;sfhsiao@fmt.com.tw;machiu@fmt.com.tw'
+                                              +'?subject=momo公版挑選機制-分享目前設定'
+                                              +'&body=【momo公版挑選機制-分享目前設定】'
+                                               +'%0d%0a分類:'+ intosetup.group 
+                                               +'　/　主軸方向:'+ intosetup.col 
+                                               +'　/　名稱:'+ intosetup.name 
+                                               +'　/　品數:1排'+ intosetup.name2 +'，共'+ intosetup.linum +'品'
+                                               +'　/　Class:'+ intosetup.classname 
+                                               +'%0d%0a--------------------------------------------------------------%0d%0a%0d%0a%0d%0a '
+                                               ">寄信給前端</a>
+                  </div>
+                  <div class="box_2_3">
+                    <pre class="language-javascript">
+                      <code class="" id="sharecode" v-text="sharecodeFu()"></code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--進階小程式-->
+          <div class="box_ Area_EcmCode js-hammer cate-fixed" style="display: none;" v-show="debug.isEcmCode.hover">
+            <div class="box_ Area Area_tabbox Area_EcmCode_box" :class="{'cate-hover': debug.isEcmCode.hover}">
+              <div class="box">
+                <div class="box_ box_tabbox_title">
+                  <a @click="debug.isEcmCode.hover = !debug.isEcmCode.hover;"><span>進階小程式</span><i></i></a>
+                </div>
+                <div class="box_ box_tabbox_content">
+                  <div class="box_2_2">
+                    <button class="btn_copy" @click="javascript:SelectText('ecmcode');">一鍵COPY</button>
+                  </div>
+                  <div class="box_2_3">
+                    <pre class="language-javascript">
+                      <code class="" id="ecmcode" v-text="debug.isEcmCode.code"></code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+      </div>
+    
+    </div>
+  </div>
+
+
+  <div class="WRAPPER-content" :class="{'isPreview': isPreview}" v-show="!debug.isshowAllLayout">
+    <div class="WRAPPER-menu">
+      <div class="WRAPPER-menu_box">
+
+        <!--手動設定-->
+        <div class="box_ Area Area_operate" :class="{'cate-hover': isPreview_adjust}">
+          <div class="Area_operate_title">
+            <h3>-- 手動設定 --
+              <div class="btn_show for_phone">
+                <div class="MuiForm MuiForm_checkbox">
+                  <label class="MuiForm_checkbox_label">
+                    <input type="checkbox" v-model="isPreview_adjust"><i></i>
+                  </label>
+                </div>
+              </div>
+            </h3>
+          </div>
+          <div class="Area_operate_filter" v-show="!isPreview_adjust">
+            <div class="box">
+              <div class="box_ box_1">
+                <div class="box_1_box" :class="{'cate-hover': isGroupFilter === 'ALL'}">
+                  <button @click="isGroupFilter = 'ALL'; updateSwiperFu();">ALL</button>
+                </div>
+                <div class="box_1_box" 
+                     v-for="(group, i) of groupsFu()" 
+                     :key="i"
+                     :class="{'cate-hover': isGroupFilter === group}">
+                  <button @click="isGroupFilter = group; updateSwiperFu(); " v-html="group" :style="{'background-color': (isGroupFilter === group) ? lists_groups[group]:'', 'border-color': lists_groups[group]}"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="Area_operate_adjust" v-show="!isPreview_adjust">
+            <div class="box swiper-container">
+              <div class="box_ box_1 swiper-wrapper">
+                <div class="box_1_box swiper-slide" 
+                     v-for="(list, list_name, list_index) of lists" 
+                     :key="list_index" 
+                     :id="'adjust_' + list_index"
+                     v-if="groupFilterFu(list.group)">
+                  <p class="num">
+                    <i>{{ list_index + 1 }}</i>
+                    <b :style="{'background-color': lists_groups[list.group]}" v-html="list.group"></b>
+                    <b class="type" v-if="list.type" v-html="(list.type === 'checkbox')?'可多選':''"></b>
+                    <span v-html="list.name + ':'"></span>
+                    <small v-html="'data' + camelcase2hyphenFu(list_name)"></small>
+                  </p>
+                  <div class="opn MuiForm MuiForm_checkbox">
+                    <label class="MuiForm_checkbox_label" 
+                           v-for="(option, i) of list.option" 
+                           :key="i"
+                           v-if="!list.type">
+                      <input type="radio"
+                             :name="list_name"
+                             :id="list_name + '_' + i"
+                             :value="option[0]"
+                             v-model="list.val"
+                             @change="checkNowLayoutFu(); toggleTagDataFu();"
+                             ><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">{{ option[0] }} <span>→{{ option[1] }}</span></div>
+                    </label>
+                    <label class="MuiForm_checkbox_label" 
+                           v-for="(option, i) of list.option" 
+                           :key="i"
+                           v-if="list.type">
+                      <input type="checkbox"
+                             :name="list_name"
+                             :id="list_name + '_' + i"  
+                             :value="option[0]"
+                             v-model="list.val_checkbox"
+                             @change="chrckboxToStringFu(list); checkNowLayoutFu(); toggleTagDataFu();"
+                             ><i class="MuiForm_checkbox_btn"></i><div class="MuiForm_checkbox_txt">{{ option[0] }} <span>→{{ option[1] }}</span></div>
+                    </label>
+                    <small></small>
+                  </div>
+                </div>      
+              </div>
+              <div class="scrollbar swiper-scrollbar"></div>
+            </div>
+            <!--左右切換-->
+            <div class="button swiper-button-next swiper-button-black"></div>
+            <div class="button swiper-button-prev swiper-button-black"></div>   
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="WRAPPER-sidebar">
+      <div class="WRAPPER-sidebar_box">
+
+        <!--常用版型-->
+        <div class="box_ Area Area_operate" :class="{'cate-hover': isPreview_ofrenLayout}">
+          <div class="Area_operate_title">
+            <h3>-- 常用版型 --
+              <div class="btn_show for_phone">
+                <div class="MuiForm MuiForm_checkbox">
+                  <label class="MuiForm_checkbox_label">
+                    <input type="checkbox" v-model="isPreview_ofrenLayout"><i></i>
+                  </label>
+                </div>
+              </div>
+            </h3>
+          </div>
+          <div class="Area_operate_Layoutfilter" v-show="!isPreview_ofrenLayout">
+            <div class="box">
+              <div class="box_ box_1">
+                <div class="box_1_box" 
+                     v-for="(group, i) of layoutsGroupsFu()" 
+                     :key="i" 
+                     :data-title="group"
+                     :class="{'cate-hover': isLayoutGroupFilter === group}">
+                  <button @click="isLayoutGroupFilter = group; updateSwiperFu();" v-html="group" :style="{'background-color': (isLayoutGroupFilter === group) ? layouts_groups[group]:'', 'border-color': layouts_groups[group]}"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="Area_operate_ofrenLayout"  v-show="!isPreview_ofrenLayout">
+            <div class="box swiper-container">
+              <div class="box_ box_1 swiper-wrapper">
+                <div class="box_1_box swiper-slide" 
+                     v-for="(layout, i) of layouts" 
+                     :key="i" 
+                     :id="'ofrenLayout_' + i"
+                     :class="{'cate-hover': layout.now,'isnew': isNewOfrenLayoutFu(i)}" 
+                     v-if="layoutsGroupFilterFu(layout.group)">
+                  <button :style="{'background-color': (layout.now) ? layouts_groups[layout.group]:''}"
+                          :title="'序號:'+ layout.group +'('+ layout.no  +')  /  主軸方向:'+ layout.col +'  /  名稱:'+ layout.name +'/　品數: 1排 '+ layout.name2 +'，共'+ layout.linum +'品  /  Class:'+ layout.classname"
+                          @click="clickToggleLayoutFu (layout,i)" >
+                    <i :style="{'background-color': layouts_groups[layout.group]}" ><span v-text="layout.no"></span></i>
+                    <span :class="{'cate-hover': layout.classname}">{{ layout.col }} / {{ layout.name }}<br class="for_phone"><small>(1排{{ layout.name2 }})</small></span>
+                  </button>
+                </div>
+              </div>
+              <div class="scrollbar swiper-scrollbar for_pc"></div>
+            </div>
+            <!--左右切換-->
+            <div class="button swiper-button-next swiper-button-black for_pc"></div>
+            <div class="button swiper-button-prev swiper-button-black for_pc"></div>   
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="WRAPPER-main">
+      <div class="WRAPPER-main_box" :style="{'background-color': intosetup.css.bgc}">
+
+        <!--公版預覽-->
+
+        <div class="box_ Area Area_PDtest ">
+        <h4>序號:{{ intosetup.group }}({{ intosetup.no }})<br>
+          /　主軸方向: {{ intosetup.col }}
+          /　名稱: {{ intosetup.name }}<br>
+          /　品數: 1排{{ intosetup.name2 }}，共{{ intosetup.linum }}品
+          /　Class: {{ intosetup.classname }}
+        </h4>
+        <h3>--公版預覽--</h3>
+        <div class="box">
+
+          <!--電腦版-->
+          <div class="box_ Area Area1220 Areabottom Area_PDtest1" :class="{'isToggleLayoutIng': isToggleLayoutIng, 'ispadding': debug.ispadding }">
+            <div class="box">
+
+              <div id="PDtest" :class="'PD_layout ' + intosetup.classname">
+                <div class="lbtclass" id="lbtclass_B01">
+                  <div class="btclass" id="bt_B_000_01">
+                    <ul class="PD_wrapper">
+              <!-- -----------------------------------------------【基本款】入稿貼語法從這邊開始----------------------------------------------- --> 
+
+                      <li class="PD_slide js-PD_id" data-id="" 
+                          v-for="i of intosetup.linum" 
+                          :style="{'background-color': intosetup.css.libgc}">
+                        <div class="PD">
+                          <a class="js-PD_url" data-title="商品連結" :data-urlpc="getIntotextFu('PD_url')" :data-urlphone="getIntotextFu('PD_url')" :href="getIntotextFu('PD_url')" target="_blank">
+                            <div class="PD_img">
+                              <img class="lazy js-PD_img" data-title="商品圖" :src="artjsSrc.getartImgPath( isImgLoading( getIntotextFu('PD_img') +'.'+ chrckImgTransparent_Array(i-1)) )" :data-original="artjsSrc.getartImgPath( getIntotextFu('PD_img') +'.'+ chrckImgTransparent_Array(i-1) )" alt="" width="230" height="230" border="0">
+                            </div>
+                            <div class="PD_into">
+                              <div class="PD_logo"><img class="lazy js-PD_logo" data-title="品牌LOGO" :src="artjsSrc.getartImgPath( isImgLoading( getIntotextFu('PD_logo') ) )" :data-original="artjsSrc.getartImgPath( getIntotextFu('PD_logo') )" alt="" width="195" height="195" border="0"></div>
+                              <h3><span class="js-PD_txt3" data-title="特標">{{ getIntotextFu('PD_txt3') }}</span><i></i></h3>
+                              <h4><b class="js-PD_txt1" data-title="品牌">{{ getIntotextFu('PD_txt1') }}</b><span class="js-PD_txt2" data-title="品名">{{ getIntotextFu('PD_txt2') }}</span><i></i></h4>
+                              <p><del class="js-PD_del" data-title="原價">{{ getIntotextFu('PD_del') }}</del><b class="js-PD_priceTxt" data-title="特價標">{{ getIntotextFu('PD_priceTxt') }}</b><span class="money">$</span><span class="Price js-PD_price" data-title="特價">{{ getIntotextFu('PD_price') }}</span><small class="js-PD_unit" data-title="單位">{{ getIntotextFu('PD_unit') }}</small></p>
+                              <div class="PD_btn PD_into_PDgo PD_go"><span><b></b><i></i></span></div>
+                            </div>
+                            <div class="PD_btn PD_go"><span><b></b><i></i></span></div>
+                          </a>
+                        </div>
+                        <div class="PD_btn more"><a class="js-More_url" data-title="看更多連結" :data-urlpc="getIntotextFu('More_url')" :data-urlphone="getIntotextFu('More_url')" :href="getIntotextFu('More_url')" 
+                                            :target="(lists.Pdit.val !== 'more')?'_blank':''"><span><b class="js-More_txt" data-title="看更多"></b><i></i></span></a></div>
+                      </li>
+
+              <!-- -----------------------------------------------【基本款】入稿貼語法到這邊結束----------------------------------------------- --> 
+                      </ul>
+                  </div>
+                </div>
+
+              </div> 
+
+            </div>
+          </div>
+
+
+
+        </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="WRAPPER-content2" v-show="debug.isshowAllLayout">
+    <div class="Area Area1220 Areabottom Area_PDtest" id="AllLayout" :class="{'ispadding': debug.ispadding }">QQQ</div>
+  </div>
+  
+  
+  
+</div>
+<!--↑WRAPPER↑-->
+
+  
+  <!-----↓套件↓-----> 
+  <script charset="utf-8" language="javascript" type="text/javascript" src="https://image.momoshop.com.tw/ecm/js/jquery-1.12.4.js?t=20201119001"></script>
+  <script charset="utf-8" data-title="延遲載圖G0.1.2"       language="javascript" type="text/javascript" src="https://image.momoshop.com.tw/ecm/js/edm/lazyload.js?t=202011170001"></script>
+  <script charset="utf-8" data-title="輪播套件v5.2.1"       language="javascript" type="text/javascript" src="images/swiper.min.js"></script>
+  <script charset="utf-8" data-title="表單UI"              language="javascript" type="text/javascript" src="images/MuiForm.js"></script>
+  <script charset="utf-8" data-title="訊息套件"             language="javascript" type="text/javascript" src="images/toastr.min.js"></script>
+  <script charset="utf-8" data-title="程式碼更好看"          language="javascript" type="text/javascript" src="images/prism.js"></script>
+  <script charset="utf-8" data-title="hammer拖移套件"       language="javascript" type="text/javascript" src="images/hammer.min.js"></script>
+  <script charset="utf-8" data-title="hammer拖移套件-設定檔" language="javascript" type="text/javascript" src="images/hammer_main.js"></script>
+  <script charset="utf-8" data-title="Vue套件"             language="javascript" type="text/javascript" src="images/vue.min.js"></script>
+  <!-----↑套件↑----->   
+  
+  <!--版型挑選機制-->
+  <script data-title="版型挑選機制-設定data" language="javascript" type="text/javascript" src="images/PD_layout_data.js"></script>
+  <script data-title="版型挑選機制-版型data" language="javascript" type="text/javascript" src="images/PD_layout_data_layout_D1.js"></script>
+  <script data-title="版型挑選機制-版型data" language="javascript" type="text/javascript" src="images/PD_layout_data_layout_D2.js"></script>
+  <script data-title="版型挑選機制-版型data" language="javascript" type="text/javascript" src="images/PD_layout_data_layout_BN.js"></script>
+  <script data-title="版型挑選機制-版型data" language="javascript" type="text/javascript" src="images/PD_layout_data_layout_F2E.js"></script>
+  <script data-title="版型挑選機制-主程式"   language="javascript" type="text/javascript" src="images/PD_layout_main.js" id="artjs"></script>
+  
+  <!--載入JS
+  <script data-title="" language="javascript" type="text/javascript" src="images/main.js"></script>-->
+
+</body>
+</html>
